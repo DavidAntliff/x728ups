@@ -1,0 +1,13 @@
+[Unit]
+Description=X728 UPS Auto-Shutdown Service
+After=docker.service
+
+[Service]
+Environment=PYTHONUNBUFFERED=1
+User=pi
+ExecStart=/home/pi/x728ups/venv/bin/python3 /home/pi/x728ups/x728ups.py -v
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+
