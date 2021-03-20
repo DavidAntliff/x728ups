@@ -199,7 +199,7 @@ def log_event(log_queue, reason):
 
 def do_command(command):
     logger.info(f"Execute: {command}")
-    #subprocess.run([command.split(), shell=False)
+    subprocess.run(command.split(), shell=False)
 
 
 def do_sync():
@@ -207,7 +207,9 @@ def do_sync():
 
 
 def do_docker_stop():
-    do_command(f"docker-compose --file {DOCKER_COMPOSE_FILE} stop")
+    # don't actually do this because they won't automatically start again on next boot
+    #do_command(f"docker-compose --file {DOCKER_COMPOSE_FILE} stop")
+    pass
 
 
 def do_shutdown():
@@ -235,12 +237,12 @@ def monitor_shutdown(log_queue):
                 time.sleep(0.02)
                 if current_time_ms() - pulse_start > REBOOT_PULSE_MAXIMUM:
                     log_event(log_queue, "Shutdown requested, halting RPi...")
-                    time.sleep(5)  # time for MQTT messages to be logged
+                    time.sleep(5)  # give enough time for MQTT messages to be logged
                     do_shutdown()
                     while True: pass
             if current_time_ms() - pulse_start > REBOOT_PULSE_MINIMUM:
                 log_event(log_queue, "Reboot requested, restarting RPi...")
-                time.sleep(5)  # time for MQTT messages to be logged
+                time.sleep(5)  # give enough time for MQTT messages to be logged
                 do_reboot()
                 while True: pass
 
