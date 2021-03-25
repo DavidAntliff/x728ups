@@ -36,6 +36,7 @@ def on_connect(client, userdata, flags, rc):
         global connected
         connected = True
         logger.info("MQTT connected")
+        client.publish("ups/event", payload="x728ups online", qos=0, retain=False)
     else:
         logger.warning("MQTT connection failed")
 
